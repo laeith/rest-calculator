@@ -1,0 +1,49 @@
+spring:
+  profiles:
+    active: @activeProfile@
+  main:
+    web-application-type: servlet
+    banner-mode: "off"
+  resources:
+    #    Don't map resources automatically
+    add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    context-path: /calculator/
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+
+---
+spring:
+  profiles: development
+
+application:
+  database:
+    url: doesntApply
+    username: TestDatabase
+    password: someDevPasswordj
+    ipAddress: ipAddressForDevDatabase
+
+---
+spring:
+  profiles: production
+
+application:
+  database:
+    url: myGreatURL
+    username: postgresProduction
+    password: someProductionPassword
+    ipAddress: ipAddressForProduction
+
+---

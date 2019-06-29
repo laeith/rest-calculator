@@ -1,0 +1,11 @@
+.idea
+.git
+
+*.iml
+
+target
+output
+build
+
+#Ignore log files
+rest-calculator.*log
