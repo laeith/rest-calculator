@@ -1,6 +1,7 @@
 package com.laeith.calculator.controller;
 
 import com.laeith.calculator.CalculatorService;
+import com.laeith.calculator.dto.CalculatorHistoryEntryDTO;
 import com.laeith.infrastructure.web.GenericResponse;
 import com.laeith.infrastructure.web.RESTError;
 import com.udojava.evalex.Expression;
@@ -26,7 +27,7 @@ class CalculatorController {
   }
 
   @GetMapping(value = "/history")
-  public GenericResponse<List<String>> evaluateExpression() {
+  public GenericResponse<List<CalculatorHistoryEntryDTO>> evaluateExpression() {
     return new GenericResponse<>(calculatorService.retrieveCalculationHistory());
   }
 

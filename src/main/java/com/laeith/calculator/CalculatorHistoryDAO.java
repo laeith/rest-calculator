@@ -1,4 +1,8 @@
 package com.laeith.calculator;
 
-class CalculatorHistoryDAO {
+import com.laeith.infrastructure.persistence.GenericDAO;
+import org.springframework.stereotype.Repository;
+
+@Repository
+class CalculatorHistoryDAO extends GenericDAO<CalculatorHistoryEntry> {
 }

@@ -57,6 +57,7 @@ public class TestDevPersistenceConfiguration {
     jpaProperties.setProperty("hibernate.jdbc.batch_size", "10");
     jpaProperties.setProperty("hibernate.show_sql", "false");
     jpaProperties.setProperty("hibernate.format_sql", "true");
+    jpaProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
 
     emf.setJpaProperties(jpaProperties);
     return emf;

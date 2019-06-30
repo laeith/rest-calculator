@@ -1,13 +1,18 @@
 package com.laeith.calculator;
 
+import com.laeith.calculator.dto.CalculatorHistoryEntryDTO;
 import com.laeith.test.utils.IntegrationTest;
+import com.laeith.test.utils.QuickTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
+@QuickTest
 class CalculatorServiceTest extends IntegrationTest {
 
   @Autowired
@@ -82,11 +87,24 @@ class CalculatorServiceTest extends IntegrationTest {
 
   @Test
   void checkDivideByZero() {
-    assertThrows(ArithmeticException.class, () -> {
-      calculatorService.calculate("5/0");
-    });
+    assertThrows(ArithmeticException.class, () -> calculatorService.calculate("5/0"));
   }
 
-//  TODO: many, many more tests
+  @Test
+  void checkHistoryRetrieval() {
+    var history = calculatorService.retrieveCalculationHistory();
+
+    // Given DTO must match data pre-populated from {@link test_data.sql}
+    CalculatorHistoryEntryDTO dto1 = CalculatorHistoryEntryDTO.builder()
+       .id(1L)
+       .input("5 + 3")
+       .output("8")
+       .computedAtUTC(Instant.parse("2019-05-29T12:52:28Z"))
+       .build();
+
+    assertThat(history).isNotNull()
+       .contains(dto1);
+  }
+
 
 }
