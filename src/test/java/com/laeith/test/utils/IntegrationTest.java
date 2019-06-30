@@ -20,14 +20,14 @@ import javax.annotation.PostConstruct;
 @Tag("spring")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application.test.yml")
+@TestPropertySource(locations = "classpath:application-test.yml")
 @ActiveProfiles(SpringProfile.TEST)
 public abstract class IntegrationTest {
 
   @LocalServerPort
   protected int port;
   protected String baseURL;
-  protected TestRestTemplate restTemplate = new TestRestTemplate();
+  protected final TestRestTemplate restTemplate = new TestRestTemplate();
 
   @PostConstruct
   private void buildBaseURL() {

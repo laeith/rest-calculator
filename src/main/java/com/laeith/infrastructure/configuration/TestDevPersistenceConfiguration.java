@@ -26,8 +26,7 @@ public class TestDevPersistenceConfiguration {
 
   private static final List<String> PRELOADED_SCRIPTS = List.of(
      "classpath:HSQL/create_tables.sql",
-     "classpath:HSQL/test_data.sql",
-     "classpath:HSQL/default_test_script.sql"
+     "classpath:HSQL/test_data.sql"
   );
 
   public TestDevPersistenceConfiguration() {

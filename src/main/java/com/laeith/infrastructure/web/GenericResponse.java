@@ -2,6 +2,7 @@ package com.laeith.infrastructure.web;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,9 @@ public class GenericResponse<T> {
   private final T data;
   private final List<RESTError> errors;
 
-  public GenericResponse(String message, T data, List<RESTError> errors) {
+  public GenericResponse(@JsonProperty("message") String message,
+                         @JsonProperty("data)") T data,
+                         @JsonProperty("errors") List<RESTError> errors) {
     this.message = message;
     this.data = data;
     this.errors = errors;
@@ -27,12 +30,16 @@ public class GenericResponse<T> {
     this(message, null, Arrays.asList(error));
   }
 
-  public GenericResponse(T data) {
-    this(null, data, null);
+  public GenericResponse(String message, List<RESTError> errors) {
+    this(message, null, errors);
   }
 
-  public GenericResponse(String message) {
-    this(message, null, null);
+  public GenericResponse(T data, String message) {
+    this(message, data, null);
+  }
+
+  public GenericResponse(T data) {
+    this(null, data, null);
   }
 
   public String getMessage() {

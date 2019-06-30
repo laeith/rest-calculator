@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS computation_history
 (
     id          BIGSERIAL PRIMARY KEY,
     input       TEXT,
-    output      DOUBLE PRECISION,
+    output      TEXT,
     author_ip   TEXT,
     computed_at_utc TIMESTAMP DEFAULT NOW()
 );

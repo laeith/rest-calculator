@@ -217,11 +217,25 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Expression solver -->
+        <dependency>
+            <groupId>com.udojava</groupId>
+            <artifactId>EvalEx</artifactId>
+            <version>2.1</version>
+        </dependency>
+
         <!-- Embedded database -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>${hsqldb.version}</version>
+        </dependency>
+
+        <!-- Java EE dependencies, removed from default class path in Java 10 -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.11</version>
         </dependency>
 
         <!-- This entry must be the last entry in dependencies list! Spring Boot requirement! -->
