@@ -4,6 +4,8 @@ import com.laeith.calculator.dto.CalculatorHistoryEntryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +37,19 @@ public class CalculatorService {
    * In addition to {@link CalculatorService#calculate(String)} this method persists computation
    * details (if successful) to database.
    */
+  @Transactional
   public String calculateAndSave(String input) {
-    throw new IllegalStateException("Not implemented");
+    var result = calculate(input);
+
+    var historyEntry = CalculatorHistoryEntry.builder()
+       .input(input)
+       .output(result)
+       .computedAtUTC(Instant.now())
+       .build();
+
+    historyDAO.save(historyEntry);
+
+    return result;
   }
 
   public List<CalculatorHistoryEntryDTO> retrieveCalculationHistory() {

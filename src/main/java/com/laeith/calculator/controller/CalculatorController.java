@@ -23,7 +23,7 @@ class CalculatorController {
 
   @PostMapping(value = "/evaluate")
   public GenericResponse<String> evaluateExpression(@RequestBody String expression) {
-    return new GenericResponse<>(calculatorService.calculate(expression));
+    return new GenericResponse<>(calculatorService.calculateAndSave(expression));
   }
 
   @GetMapping(value = "/history")
@@ -35,6 +35,13 @@ class CalculatorController {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public RESTError handleIncorrectExpression(Expression.ExpressionException ex) {
     return new RESTError("Failed to parse provided mathematical expression.",
+       ex.getMessage());
+  }
+
+  @ExceptionHandler(ArithmeticException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public RESTError handleArithmeticException(ArithmeticException ex) {
+    return new RESTError("Arithmetic exception thrown.",
        ex.getMessage());
   }
 

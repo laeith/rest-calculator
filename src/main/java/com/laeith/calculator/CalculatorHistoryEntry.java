@@ -1,9 +1,8 @@
 package com.laeith.calculator;
 
 import com.laeith.calculator.dto.CalculatorHistoryEntryDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -16,12 +15,16 @@ import java.time.Instant;
 class CalculatorHistoryEntry {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @NonNull
   private String input;
+  @NonNull
   private String output;
+  @Nullable
   @Column(name = "author_ip")
   private String authorIp;
+  @NonNull
   @Column(name = "computed_at_utc")
   private Instant computedAtUTC;
 

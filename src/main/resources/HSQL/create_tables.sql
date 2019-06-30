@@ -7,9 +7,9 @@ SET DATABASE SQL SYNTAX PGS TRUE;
 CREATE TABLE IF NOT EXISTS computation_history
 (
     id          BIGSERIAL PRIMARY KEY,
-    input       TEXT,
-    output      TEXT,
-    author_ip   TEXT,
-    computed_at_utc TIMESTAMP DEFAULT NOW()
+    input       TEXT NOT NULL,
+    output      TEXT NOT NULL,
+    author_ip   TEXT DEFAULT NULL,
+    computed_at_utc TIMESTAMP DEFAULT NOW() NOT NULL
 );
 

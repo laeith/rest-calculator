@@ -18,7 +18,6 @@ public class CalculatorHistoryEntryDTO {
   private String input;
   @NonNull
   private String output;
-  @NonNull
   @JsonSerialize(using = ToStringSerializer.class)
   private Instant computedAtUTC;
 

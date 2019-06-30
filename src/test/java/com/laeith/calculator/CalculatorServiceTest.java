@@ -79,10 +79,10 @@ class CalculatorServiceTest extends IntegrationTest {
        .isEqualTo("20");
 
 //    exponentiation over multiplication over addition
-    assertThat(calculatorService.calculate("6 * 3 + 2"))
-       .isEqualTo("20");
+    assertThat(calculatorService.calculate("6 ^ 2 * 2 + 2"))
+       .isEqualTo("74");
 
-//    TODO: more tests, more tests...
+//    TODO: add more precedence tests
   }
 
   @Test
@@ -94,7 +94,7 @@ class CalculatorServiceTest extends IntegrationTest {
   void checkHistoryRetrieval() {
     var history = calculatorService.retrieveCalculationHistory();
 
-    // Given DTO must match data pre-populated from {@link test_data.sql}
+    // Given DTO must match data pre-populated from test_data.sql
     CalculatorHistoryEntryDTO dto1 = CalculatorHistoryEntryDTO.builder()
        .id(1L)
        .input("5 + 3")
@@ -103,7 +103,25 @@ class CalculatorServiceTest extends IntegrationTest {
        .build();
 
     assertThat(history).isNotNull()
+       .isNotEmpty()
        .contains(dto1);
+  }
+
+  @Test
+  void checkHistoryUpdate() {
+    var oldHistory = calculatorService.retrieveCalculationHistory();
+
+    calculatorService.calculateAndSave("10+17");
+
+    var newHistory = calculatorService.retrieveCalculationHistory();
+
+    assertThat(newHistory).isNotNull()
+       .isNotEmpty();
+    assertThat(newHistory.size()).isEqualTo(oldHistory.size() + 1);
+
+    var newEntry = newHistory.get(oldHistory.size());
+    assertThat(newEntry.getInput()).isEqualTo("10+17");
+    assertThat(newEntry.getOutput()).isEqualTo("27");
   }
 
 

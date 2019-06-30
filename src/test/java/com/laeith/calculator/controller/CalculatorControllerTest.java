@@ -54,4 +54,23 @@ class CalculatorControllerTest extends IntegrationTest {
     assertThat(response.getBody().getMessage()).isNotNull();
     assertThat(response.getBody().getDescription()).isNotNull();
   }
+
+  @Test
+  void checkResponseForArithmeticErrors() {
+    var endPoint = "/evaluate";
+
+    HttpEntity<String> requestEntity = new HttpEntity<>("5/0");
+
+    var response = restTemplate.exchange(
+       baseURL + endPoint,
+       HttpMethod.POST,
+       requestEntity,
+       RESTError.class
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getMessage()).isNotNull();
+    assertThat(response.getBody().getDescription()).isNotNull();
+  }
 }
