@@ -28,13 +28,8 @@ public abstract class GenericDAO<E> {
   }
 
   public E save(E newInstance) {
-//    TODO: read about these locks
     LOG.debug("DB Save: " + newInstance.toString());
-    if (em.contains(newInstance)) {
-      em.lock(newInstance, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-    } else {
-      em.persist(newInstance);
-    }
+    em.persist(newInstance);
     return newInstance;
   }
 
