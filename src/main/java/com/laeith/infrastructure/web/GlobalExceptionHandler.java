@@ -27,29 +27,39 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(ServletException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public GenericResponse genericIncorrectRequestMethod(ServletException ex) {
-    return new GenericResponse(ex.getMessage());
-  }
-
-  @ExceptionHandler(IllegalStateException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public GenericResponse genericIllegalStateHandler(IllegalStateException ex) {
-    LOG.error("IllegalStateException caught!", ex);
-    return new GenericResponse(ex.getMessage());
+  public GenericResponse<RESTError> genericIncorrectRequestHandler(ServletException ex) {
+    LOG.info("Requested page doesn't exist", ex);
+    return new GenericResponse<>("Failed to serve request",
+       new RESTError("Requested page doesn't exist")
+    );
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public GenericResponse genericEntityNotFoundHandler(EntityNotFoundException ex) {
-    return new GenericResponse(ex.getMessage());
+  public GenericResponse<RESTError> genericEntityNotFoundHandler(EntityNotFoundException ex) {
+    LOG.info("Entity not found", ex);
+    return new GenericResponse<>("Entity not found",
+       new RESTError(ex.getMessage())
+    );
+  }
+
+  @ExceptionHandler(IllegalStateException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public GenericResponse<RESTError> genericIllegalStateHandler(IllegalStateException ex) {
+    LOG.error("IllegalStateException caught!", ex);
+    return new GenericResponse<>("Internal server error",
+       new RESTError("Illegal state problem")
+    );
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ExceptionHandler(Exception.class)
   @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-  public GenericResponse genericExceptionHandler(Exception ex) {
+  public GenericResponse<RESTError> genericExceptionHandler(Exception ex) {
     LOG.error("Unhandled server-side exception", ex);
-    return new GenericResponse("Unexpected server-side error encountered - " +
-       ZonedDateTime.now(ZoneOffset.UTC));
+    return new GenericResponse<>("Internal server error",
+       new RESTError("Unexpected server-side error encountered - " +
+          ZonedDateTime.now(ZoneOffset.UTC))
+    );
   }
 }

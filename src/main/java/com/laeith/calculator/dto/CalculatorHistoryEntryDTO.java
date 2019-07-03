@@ -13,13 +13,13 @@ import java.time.Instant;
 @JsonDeserialize(builder = CalculatorHistoryEntryDTO.CalculatorHistoryEntryDTOBuilder.class)
 public class CalculatorHistoryEntryDTO {
   @NonNull
-  private Long id;
+  private final Long id;
   @NonNull
-  private String input;
+  private final String input;
   @NonNull
-  private String output;
+  private final String output;
   @JsonSerialize(using = ToStringSerializer.class)
-  private Instant computedAtUTC;
+  private final Instant computedAtUTC;
 
   // Required for Lombok <-> Jackson compatibility
   @JsonPOJOBuilder(withPrefix = "")

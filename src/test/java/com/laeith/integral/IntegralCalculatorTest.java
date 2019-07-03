@@ -1,6 +1,7 @@
 package com.laeith.integral;
 
 import com.laeith.integral.dto.IntegralComputationTimeoutException;
+import com.laeith.integral.dto.TooLowPrecisionException;
 import com.laeith.test.utils.QuickTest;
 import com.laeith.test.utils.SlowTest;
 import org.junit.jupiter.api.Test;
@@ -14,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class IntegralCalculatorTest {
 
   private final IntegralCalculator integralCalculator = new IntegralCalculator();
-  private final SequentialIntegralService seqIntegralService = new SequentialIntegralService();
 
+//  Results correctness tolerance
   private final double TOLERANCE = 0.1;
 
   @Test
-  void shouldReturnResultsWithinSetTolerance() {
+  void shouldReturnCorrectResultsWithinSetTolerance() {
     var approximation = integralCalculator.calculateEToXIntegral(2, 5,
        4, 5_000);
     var exactResult = 141.02;
@@ -66,6 +67,14 @@ class IntegralCalculatorTest {
     assertThrows(IllegalArgumentException.class, () -> {
       integralCalculator.calculateEToXIntegral(5, 2,
          5_000_000, 500);
+    });
+  }
+
+  @Test
+  void shouldThrowIntegralCalculationExceptionDueToTooBigResult() {
+    assertThrows(TooLowPrecisionException.class, () -> {
+      integralCalculator.calculateEToXIntegral(0, 5000,
+         4, 500);
     });
   }
 

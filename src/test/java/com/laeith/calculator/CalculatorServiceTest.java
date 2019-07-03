@@ -3,6 +3,7 @@ package com.laeith.calculator;
 import com.laeith.calculator.dto.CalculatorHistoryEntryDTO;
 import com.laeith.test.utils.IntegrationTest;
 import com.laeith.test.utils.QuickTest;
+import com.udojava.evalex.Expression;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,13 +20,13 @@ class CalculatorServiceTest extends IntegrationTest {
   private CalculatorService calculatorService;
 
   @Test
-  void calculateSimpleAddition() {
+  void calculateAddition() {
     assertThat(calculatorService.calculate("5 + 10"))
        .isEqualTo("15");
   }
 
   @Test
-  void calculateSimpleAdditionWithNegatives() {
+  void calculateAdditionWithNegatives() {
     assertThat(calculatorService.calculate("10 + -5"))
        .isEqualTo("5");
     assertThat(calculatorService.calculate("5 + -10"))
@@ -33,7 +34,7 @@ class CalculatorServiceTest extends IntegrationTest {
   }
 
   @Test
-  void calculateSimpleDeduction() {
+  void calculateDeduction() {
     assertThat(calculatorService.calculate("10 - 5"))
        .isEqualTo("5");
     assertThat(calculatorService.calculate("5 - 10"))
@@ -41,31 +42,39 @@ class CalculatorServiceTest extends IntegrationTest {
   }
 
   @Test
-  void calculateSimpleMultiplication() {
+  void calculateDeductionWithNegatives() {
+    assertThat(calculatorService.calculate("10 - -5"))
+       .isEqualTo("15");
+    assertThat(calculatorService.calculate("-5 - -10"))
+       .isEqualTo("5");
+  }
+
+  @Test
+  void calculateMultiplication() {
     assertThat(calculatorService.calculate("5 * 10"))
        .isEqualTo("50");
   }
 
   @Test
-  void calculateSimpleDivision() {
+  void calculateDivision() {
     assertThat(calculatorService.calculate("10 / 5"))
        .isEqualTo("2");
   }
 
   @Test
-  void calculateSimpleExponentiation() {
+  void calculateExponentiation() {
     assertThat(calculatorService.calculate("5 ^ 2"))
        .isEqualTo("25");
   }
 
   @Test
-  void calculateSimpleSquareRoot() {
+  void calculateSquareRoot() {
     assertThat(calculatorService.calculate("SQRT(36)"))
        .isEqualTo("6");
   }
 
   @Test
-  void calculateSimpleExpressionWithBrackets() {
+  void calculateExpressionWithBrackets() {
     assertThat(calculatorService.calculate("6 * (3 + 2)"))
        .isEqualTo("30");
     assertThat(calculatorService.calculate("(6 * 3) + 2"))
@@ -82,16 +91,29 @@ class CalculatorServiceTest extends IntegrationTest {
     assertThat(calculatorService.calculate("6 ^ 2 * 2 + 2"))
        .isEqualTo("74");
 
-//    TODO: add more precedence tests
+//    brackets over multiplication
+    assertThat(calculatorService.calculate("6 ^ 2 * (2 + 2)"))
+       .isEqualTo("144");
+
+//    brackets over exponentiation
+    assertThat(calculatorService.calculate("6 ^ (2 * 2) + 2"))
+       .isEqualTo("1298");
   }
 
   @Test
-  void checkDivideByZero() {
+  void shouldThrowArithmeticExceptionOnDivideByZero() {
     assertThrows(ArithmeticException.class, () -> calculatorService.calculate("5/0"));
   }
 
   @Test
-  void checkHistoryRetrieval() {
+  void shouldThrowExpressionExceptionOnMalformedInput() {
+    assertThrows(Expression.ExpressionException.class, () -> calculatorService.calculate("ac/d1"));
+    assertThrows(Expression.ExpressionException.class, () -> calculatorService.calculate("+"));
+    assertThrows(Expression.ExpressionException.class, () -> calculatorService.calculate(""));
+  }
+
+  @Test
+  void shouldReturnHistoryCorrectly() {
     var history = calculatorService.retrieveCalculationHistory();
 
     // Given DTO must match data pre-populated from test_data.sql

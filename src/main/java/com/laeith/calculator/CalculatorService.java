@@ -1,6 +1,8 @@
 package com.laeith.calculator;
 
 import com.laeith.calculator.dto.CalculatorHistoryEntryDTO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CalculatorService {
+  private static final Logger LOG = LogManager.getLogger(CalculatorService.class);
 
   private final CalculatorHistoryDAO historyDAO;
 

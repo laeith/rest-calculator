@@ -1,13 +1,13 @@
 package com.laeith.calculator.controller;
 
 import com.laeith.infrastructure.web.GenericResponse;
-import com.laeith.infrastructure.web.RESTError;
 import com.laeith.test.utils.IntegrationTest;
 import com.laeith.test.utils.QuickTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,16 +17,12 @@ class CalculatorControllerTest extends IntegrationTest {
 
   @Test
   void correctEvaluationControllerResponse() {
-    var endPoint = "/evaluate";
+    var endpoint = "/evaluate";
 
-    HttpEntity<String> requestEntity = new HttpEntity<>("5 + 10");
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("expression", "5 + 10");
 
-    var response = restTemplate.exchange(
-       baseURL + endPoint,
-       HttpMethod.POST,
-       requestEntity,
-       GenericResponse.class
-    );
+    ResponseEntity<GenericResponse> response = postWithFormParams(endpoint, params, GenericResponse.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -37,40 +33,32 @@ class CalculatorControllerTest extends IntegrationTest {
   }
 
   @Test
-  void checkProperResponseForIncorrectExpression() {
-    var endPoint = "/evaluate";
+  void shouldReturn400ForIncorrectExpression() {
+    var endpoint = "/evaluate";
 
-    HttpEntity<String> requestEntity = new HttpEntity<>("5as + 10 ///12as");
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("expression", "5as + 10 ///12as");
 
-    var response = restTemplate.exchange(
-       baseURL + endPoint,
-       HttpMethod.POST,
-       requestEntity,
-       RESTError.class
-    );
+    var response = postWithFormParams(endpoint, params, GenericResponse.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getMessage()).isNotNull();
-    assertThat(response.getBody().getDescription()).isNotNull();
+    assertThat(response.getBody().getErrors()).isNotNull().isNotEmpty();
   }
 
   @Test
-  void checkResponseForArithmeticErrors() {
-    var endPoint = "/evaluate";
+  void shouldReturn400ForArithmeticErrors() {
+    var endpoint = "/evaluate";
 
-    HttpEntity<String> requestEntity = new HttpEntity<>("5/0");
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("expression", "5/0");
 
-    var response = restTemplate.exchange(
-       baseURL + endPoint,
-       HttpMethod.POST,
-       requestEntity,
-       RESTError.class
-    );
+    var response = postWithFormParams(endpoint, params, GenericResponse.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getMessage()).isNotNull();
-    assertThat(response.getBody().getDescription()).isNotNull();
+    assertThat(response.getBody().getErrors()).isNotNull().isNotEmpty();
   }
 }

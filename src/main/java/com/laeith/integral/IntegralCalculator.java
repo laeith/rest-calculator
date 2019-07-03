@@ -2,6 +2,7 @@ package com.laeith.integral;
 
 import com.laeith.integral.dto.IntegralCalculationException;
 import com.laeith.integral.dto.IntegralComputationTimeoutException;
+import com.laeith.integral.dto.TooLowPrecisionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,8 @@ import java.util.stream.LongStream;
 
 @Service
 class IntegralCalculator {
-//  TODO: rename it to integralCalculator and put it into calculator service, service will
-//  TODO: additionally create DTO, probably with some timings etc.
-
   private static final Logger LOG = LogManager.getLogger(IntegralCalculator.class);
+
   private static final int MAX_COMPUTATION_TIME_SECONDS = 2;
 
   /**
@@ -34,8 +33,8 @@ class IntegralCalculator {
    * @param subintervals       number of subintervals used for integral calculation in Riemann sum
    * @return
    */
-  public double calculateEToXIntegral(final double lowerIntervalBound, final double upperIntervalBound,
-                                      final int processingUnits, final long subintervals) {
+  double calculateEToXIntegral(final double lowerIntervalBound, final double upperIntervalBound,
+                               final int processingUnits, final long subintervals) {
     if (processingUnits > 32767 || processingUnits < 1) {
       throw new IllegalArgumentException("Processing units must be in range 1 - 32767");
     }
@@ -44,23 +43,27 @@ class IntegralCalculator {
          " bound while it was: " + upperIntervalBound + " <= " + lowerIntervalBound);
     }
 
-//    TODO: check overflows, probably not here but in the controller?, not really
     final var forkJoinPool = new ForkJoinPool(processingUnits);
-
     final double divisionSize = (upperIntervalBound - lowerIntervalBound) / subintervals;
 
     ForkJoinTask<OptionalDouble> computationTask = forkJoinPool.submit(() -> {
       return LongStream.range(0, subintervals).parallel()
-         .mapToDouble(intervalNumber -> {
-           double intervalStart = lowerIntervalBound + (intervalNumber * divisionSize);
-           return calculateAreaForSubinterval(divisionSize, intervalStart);
+         .mapToDouble(subintervalNumber -> {
+           double subintervalLowerBound = lowerIntervalBound + (subintervalNumber * divisionSize);
+           return calculateAreaForSubinterval(divisionSize, subintervalLowerBound);
          })
          .reduce(Double::sum);
     });
 
     try {
       OptionalDouble output = computationTask.get(MAX_COMPUTATION_TIME_SECONDS, TimeUnit.SECONDS);
-      return output.orElseThrow(() -> new IntegralCalculationException("Failed to compute integral"));
+      var result = output.orElseThrow(() -> new IntegralCalculationException("Failed to compute integral"));
+      if (Double.isInfinite(result)) {
+        throw new TooLowPrecisionException("Result is too big, calculator doesn't support " +
+           "this kind of precision at the moment");
+      } else {
+        return result;
+      }
     } catch (InterruptedException e) {
       LOG.error("ForkJoinTask was interrupted", e);
       throw new IntegralCalculationException("Integral calculation was interrupted");
@@ -73,8 +76,8 @@ class IntegralCalculator {
     }
   }
 
-  private double calculateAreaForSubinterval(double divisionSize, double intervalStart) {
-    return Math.pow(Math.E, intervalStart) * divisionSize;
+  private double calculateAreaForSubinterval(double divisionSize, double intervalLowerBound) {
+    return Math.pow(Math.E, intervalLowerBound) * divisionSize;
   }
 
 }
