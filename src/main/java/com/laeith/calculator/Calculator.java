@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 class Calculator {
 
+  private Calculator() {}
+
   /**
    * Accepts valid mathematical equation specified in infix notation and returns its product.
    * Operands and operations may be separated by spaces.
