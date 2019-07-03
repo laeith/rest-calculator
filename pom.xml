@@ -34,6 +34,7 @@
         <log4j-web>2.11.2</log4j-web>
 
         <find.bugs.annotations>3.0.1</find.bugs.annotations>
+        <swagger.version>2.9.2</swagger.version>
 
         <java.version>11</java.version>
     </properties>
@@ -243,6 +244,19 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>${hsqldb.version}</version>
+        </dependency>
+
+        <!--        Swagger-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
 
         <!-- Java EE dependencies, removed from default class path in Java 10 -->

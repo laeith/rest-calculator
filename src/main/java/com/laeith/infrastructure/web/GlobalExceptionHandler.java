@@ -2,13 +2,12 @@ package com.laeith.infrastructure.web;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletException;
@@ -22,8 +21,21 @@ import java.time.ZonedDateTime;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestController
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler implements ErrorController {
   private static final Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class);
+
+  private final static String ERROR_PATH = "/error";
+
+  /**
+   * This controller's method handles any internal redirects to /error, in particular access
+   * denied related issues.
+   */
+  @RequestMapping(value = ERROR_PATH)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ApiIgnore
+  public GenericResponse accessDeniedHandler() throws ServletException {
+    throw new ServletException("Error page is not implemented");
+  }
 
   @ExceptionHandler(ServletException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -61,5 +73,10 @@ public class GlobalExceptionHandler {
        new RESTError("Unexpected server-side error encountered - " +
           ZonedDateTime.now(ZoneOffset.UTC))
     );
+  }
+
+  @Override
+  public String getErrorPath() {
+    return ERROR_PATH;
   }
 }
