@@ -56,7 +56,7 @@ class IntegralController {
   @ExceptionHandler(IllegalArgumentException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public GenericResponse<RESTError> handleComputationTimeoutException(IllegalArgumentException ex) {
-    LOG.info(ex);
+    LOG.info("Provided parameters are incorrect", ex);
     return new GenericResponse<>("Provided parameters are incorrect",
        new RESTError(ex.getMessage())
     );
@@ -65,6 +65,7 @@ class IntegralController {
   @ExceptionHandler(TooLowPrecisionException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public GenericResponse<RESTError> handleTooLowPrecisionException(TooLowPrecisionException ex) {
+    LOG.info("Calculator precision is too low for meaningful results", ex);
     return new GenericResponse<>("Integral can't be calculated correctly",
        new RESTError(ex.getMessage())
     );

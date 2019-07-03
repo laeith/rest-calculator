@@ -32,7 +32,7 @@ public class CalculatorService {
    * @param input
    * @return
    */
-  public String calculate(String input) {
+  String calculate(String input) {
     return Calculator.calculate(input).toPlainString();
   }
 
@@ -42,6 +42,7 @@ public class CalculatorService {
    */
   @Transactional
   public String calculateAndSave(String input) {
+    LOG.info("Calculating and saving results for expression: " + input);
     var result = calculate(input);
 
     var historyEntry = CalculatorHistoryEntry.builder()
@@ -56,6 +57,7 @@ public class CalculatorService {
   }
 
   public List<CalculatorHistoryEntryDTO> retrieveCalculationHistory() {
+    LOG.info("Retrieving global calculation history");
     return historyDAO.getAll().stream()
        .map(CalculatorHistoryEntry::toDto)
        .collect(Collectors.toList());

@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping
 class CalculatorController {
   private static final Logger LOG = LogManager.getLogger(CalculatorController.class);
-
   private final CalculatorService calculatorService;
 
   @Autowired
@@ -38,6 +37,7 @@ class CalculatorController {
   @ExceptionHandler(Expression.ExpressionException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public GenericResponse<RESTError> handleIncorrectExpression(Expression.ExpressionException ex) {
+    LOG.info("Provided mathematical expression is incorrect", ex);
     return new GenericResponse<>("Provided mathematical expression is incorrect",
        new RESTError(ex.getMessage()));
   }
@@ -45,6 +45,7 @@ class CalculatorController {
   @ExceptionHandler(ArithmeticException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public GenericResponse<RESTError> handleArithmeticException(ArithmeticException ex) {
+    LOG.info("Calculation failed due to ArithmeticException", ex);
     return new GenericResponse<>("Arithmetic exception thrown", new RESTError(ex.getMessage()));
   }
 
