@@ -11,7 +11,6 @@ public class Application {
   private static final Logger LOG = LogManager.getLogger(Application.class);
 
   public static void main(String[] args) {
-    LOG.info("Calculator web service starts...");
     SpringApplication.run(Application.class, args);
   }
 

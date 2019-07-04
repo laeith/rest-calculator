@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,7 +28,7 @@ class IntegralController {
     this.integralService = integralService;
   }
 
-  @PostMapping
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ApiOperation("Calculates e^x integral within given bounds using Riemann sum")
   public GenericResponse<IntegralApproximationDTO> approximateEToXIntegral(
      @ApiParam(value = "Numeric lower bound for integral [lowerBound < upperBound]", example = "2")

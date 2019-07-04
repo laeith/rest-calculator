@@ -11,10 +11,29 @@ This is a small REST-based calculator service.
 This will automatically run the application in an embedded mode (using embedded Tomcat). This will also start an in-memory HSQL database for development / test needs.
 
 Production deployment can be approached in many ways, depending on the environment / system requirements e.g. we can:
-- Build a JAR out of this project and run it directly in production environment.
+- Build a JAR out of this project and run it directly in production environment. (mvn package)
 - Build a WAR file and deploy to an external servlet container (it would be advisable to create a proper build script for that, e.g. one that would remove embedded tomcat dependencies from the WAR file)
 
 In any case we always have to make sure that production system adheres to the requirements (available ports, open ports, connection availability etc.).
+
+Supported operations for calculator (/evaluate endpoint):
+   - Addition: +
+   - Deduction: -
+   - Multiplication: *
+   - Division: /
+   - Exponentiation: b^n
+   - Square root: SQRT(n)
+   - Brackets: ()
+   - Comparisons: 3>2
+   
+Valid examples:
+   - 2 + 7 * (1 + 3)
+   - 2^3 / 7 + 3
+   - SQRT(36)
+   - 6^(7- 3)
+   - 123
+   - 5<8
+
 
 Other remarks:
   - There is no security implemented whatsoever.
@@ -25,6 +44,7 @@ Other remarks:
   - There are 2 test types, slow and quick ones, for very quick iterations one can run only tests tagged as 'quick'.
   - /history endpoint returns all history at the moment, might need some pagination in the future
   - At the moment, 'Calculator' uses an out of the box solution for infix expression evaluation, it uses 'EvalEx' library. In the future I might rewrite it to a custom solution using custom Tokenizer, Parser and e.g. modified Shunting Yard algorithm for evaluation.
+  - Swagger API should be externalized, probably
 
 There are 3 Spring profiles available (see SpringProfile class): 
 - **development** (default): starts HSQL as an in-mem database
@@ -41,3 +61,5 @@ On my machine I get the following results:
         integralservicebenchmark.timeitparallel4units  avgt   10   32.508 ± 0.680  ms/op
         integralservicebenchmark.timeitparallel1unit   avgt   10  103.756 ± 1.387  ms/op
         IntegralServiceBenchmark.timeItSequential      avgt   10   89.483 ± 0.193  ms/op
+
+

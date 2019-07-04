@@ -30,19 +30,13 @@ public class GlobalExceptionHandler implements ErrorController {
    * This controller's method handles any internal redirects to /error, in particular access
    * denied related issues.
    */
+  @ExceptionHandler(ServletException.class)
   @RequestMapping(value = ERROR_PATH)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ApiIgnore
-  public GenericResponse accessDeniedHandler() throws ServletException {
-    throw new ServletException("Error page is not implemented");
-  }
-
-  @ExceptionHandler(ServletException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public GenericResponse<RESTError> genericIncorrectRequestHandler(ServletException ex) {
-    LOG.info("Requested page doesn't exist", ex);
     return new GenericResponse<>("Failed to serve request",
-       new RESTError("Requested page doesn't exist")
+       new RESTError("Requested page doesn't exist / is forbidden")
     );
   }
 
