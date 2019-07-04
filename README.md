@@ -9,8 +9,8 @@ This is a small REST-based calculator service.
    - **Run Application.main()**
    
 Once up and running, one can verify availability by accessing:
-    - http://localhost:8080/calculator/history
-    - http://localhost:8080/calculator/swagger-ui.html
+- http://localhost:8080/calculator/history
+- http://localhost:8080/calculator/swagger-ui.html
 
 This will automatically run the application in an embedded mode (using embedded Tomcat). This will also start an in-memory HSQL database for development / test needs.
 
