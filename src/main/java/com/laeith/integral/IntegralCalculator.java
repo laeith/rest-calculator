@@ -42,6 +42,9 @@ class IntegralCalculator {
       throw new IllegalArgumentException("Upper interval bound must be bigger than lower interval" +
          " bound while it was: " + upperIntervalBound + " <= " + lowerIntervalBound);
     }
+    if (subintervals <= 0) {
+      throw new IllegalArgumentException("Subintervals must be a positive long value");
+    }
 
     final var forkJoinPool = new ForkJoinPool(processingUnits);
     final double divisionSize = (upperIntervalBound - lowerIntervalBound) / subintervals;

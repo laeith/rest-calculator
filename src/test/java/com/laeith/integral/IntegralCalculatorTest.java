@@ -71,6 +71,14 @@ class IntegralCalculatorTest {
   }
 
   @Test
+  void shouldThrowIllegalArgumentExceptionOnNegativeSubintervals() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      integralCalculator.calculateEToXIntegral(0, 5000,
+         4, -500);
+    });
+  }
+
+  @Test
   void shouldThrowIntegralCalculationExceptionDueToTooBigResult() {
     assertThrows(TooLowPrecisionException.class, () -> {
       integralCalculator.calculateEToXIntegral(0, 5000,

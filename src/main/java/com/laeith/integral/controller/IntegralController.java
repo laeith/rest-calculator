@@ -7,6 +7,8 @@ import com.laeith.integral.IntegralService;
 import com.laeith.integral.dto.IntegralApproximationDTO;
 import com.laeith.integral.dto.IntegralComputationTimeoutException;
 import com.laeith.integral.dto.TooLowPrecisionException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +27,17 @@ class IntegralController {
     this.integralService = integralService;
   }
 
-  //  Overflows?
   @PostMapping
+  @ApiOperation("Calculates e^x integral within given bounds using Riemann sum")
   public GenericResponse<IntegralApproximationDTO> approximateEToXIntegral(
+     @ApiParam(value = "Numeric lower bound for integral [lowerBound < upperBound]", example = "2")
      @RequestParam String lowerBound,
+     @ApiParam(value = "Numeric upper bound for integral [lowerBound < upperBound]", example = "5")
      @RequestParam String upperBound,
+     @ApiParam(value = "Parallelism level, at most should match number of cores [1-32767]",
+        example = "2")
      @RequestParam String processingUnits,
+     @ApiParam(value = "Number of subintervals", example = "50000")
      @RequestParam String subintervals
   ) {
 //    Manual parsing is required to avoid silent overflows during Jackson binding process

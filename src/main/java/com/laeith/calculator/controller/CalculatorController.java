@@ -5,6 +5,8 @@ import com.laeith.calculator.dto.CalculatorHistoryEntryDTO;
 import com.laeith.infrastructure.web.GenericResponse;
 import com.laeith.infrastructure.web.RESTError;
 import com.udojava.evalex.Expression;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,16 @@ class CalculatorController {
   }
 
   @PostMapping(value = "/evaluate")
-  public GenericResponse<String> evaluateExpression(@RequestParam String expression) {
+  @ApiOperation("Evaluates math expressions")
+  public GenericResponse<String> evaluateExpression(
+     @ApiParam(value = "Math expression for evaluation", example = "5-3^(2+1)")
+     @RequestParam String expression
+  ) {
     return new GenericResponse<>(calculatorService.calculateAndSave(expression));
   }
 
   @GetMapping(value = "/history")
+  @ApiOperation("Returns list of all calculations done so far")
   public GenericResponse<List<CalculatorHistoryEntryDTO>> evaluateExpression() {
     return new GenericResponse<>(calculatorService.retrieveCalculationHistory());
   }
