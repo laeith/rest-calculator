@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.MultiValueMap;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 /**
  * Base class for all integration tests.
@@ -23,6 +24,7 @@ import javax.annotation.PostConstruct;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.yml")
+@Transactional
 @ActiveProfiles(SpringProfile.TEST)
 public abstract class IntegrationTest {
 

@@ -7,6 +7,7 @@ import com.udojava.evalex.Expression;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
