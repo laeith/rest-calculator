@@ -23,7 +23,7 @@
         <hsqldb.version>2.4.1</hsqldb.version>
         <postgres.driver.version>42.2.4</postgres.driver.version>
 
-        <jackson.version>2.9.9</jackson.version>
+        <jackson.version>2.10.0</jackson.version>
         <lombok.verion>1.18.8</lombok.verion>
         <snakeyaml.version>1.24</snakeyaml.version>
 
