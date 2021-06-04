@@ -25,7 +25,7 @@
 
         <jackson.version>2.9.9</jackson.version>
         <lombok.verion>1.18.8</lombok.verion>
-        <snakeyaml.version>1.24</snakeyaml.version>
+        <snakeyaml.version>1.26</snakeyaml.version>
 
         <junit.version>5.3.2</junit.version>
         <assertj.version>3.11.1</assertj.version>
